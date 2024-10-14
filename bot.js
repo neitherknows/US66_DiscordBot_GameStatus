@@ -53,8 +53,16 @@ function Sleep(milliseconds) {
 //----------------------------------------------------------------------------------------------------------
 // create client
 require('dotenv').config();
-const {Client, MessageEmbed, Intents, MessageActionRow, MessageButton} = require('discord.js');
-const client = new Client({ intents: 1 });
+const { Client, EmbedBuilder, GatewayIntentBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent
+    ]
+});
+
 //----------------------------------------------------------------------------------------------------------
 // on client ready
 client.on('ready', async () => {
@@ -119,16 +127,14 @@ client.on('ready', async () => {
 //----------------------------------------------------------------------------------------------------------
 // create/get last status message
 async function createStatusMessage(statusChannel) {
+    const embed = new EmbedBuilder()
+        .setTitle("instance starting...")
+        .setColor(0xffff00);
 
-        // create new message
-        let embed = new MessageEmbed();
-        embed.setTitle("instance starting...");
-        embed.setColor('#ffff00');
-
-        return await statusChannel.send({ embeds: [embed] }).then((sentMessage)=> {
-                return sentMessage;
-        });
-};
+    return await statusChannel.send({ embeds: [embed] }).then((sentMessage) => {
+        return sentMessage;
+    });
+}
 
 function clearOldMessages(statusChannel, nbr) {
         return statusChannel.messages.fetch({limit: 99}).then(messages => {
@@ -179,29 +185,26 @@ function getLastMessage(statusChannel) {
 //----------------------------------------------------------------------------------------------------------
 // main loops
 async function startStatusMessage(statusMessage) {
-        while(true){
-                try {
-                        // steam link button
-                        let row = new MessageActionRow()
-                        row.addComponents(
-                                new MessageButton()
-                                        .setCustomId('steamLink')
-                                        .setLabel('Connect')
-                                        .setStyle('PRIMARY')
-                        );
+    while(true) {
+        try {
+            const row = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('steamLink')
+                        .setLabel('Connect')
+                        .setStyle(ButtonStyle.Primary)
+                );
 
-                        let embed = await generateStatusEmbed();
-                        statusMessage.edit({ embeds: [embed], components: config["steam_btn"] ? [row] : [] });
-                } catch (error) {
-                        process.send({
-                                instanceid : instanceId,
-                                message : "ERROR: could not edit status message. " + error
-                        });
-                };
+            const embed = await generateStatusEmbed();
+            statusMessage.edit({ embeds: [embed], components: config["steam_btn"] ? [row] : [] });
+        } catch (error) {
+            console.error("ERROR: could not edit status message.", error);
+        }
 
-                await Sleep(config["statusUpdateTime"] * 1000);
-        };
-};
+        await Sleep(config["statusUpdateTime"] * 1000);
+    }
+}
+
 
 client.on('interactionCreate', interaction => {
         if (!interaction.isButton()) return;
