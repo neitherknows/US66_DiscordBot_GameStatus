@@ -236,7 +236,7 @@ function generateStatusEmbed() {
         updatedTime.setMinutes(updatedTime.getMinutes() + config["timezone"][1]);
 
         let footertimestamp = ticEmojy + ' ' + "Last Update" + ': ' + updatedTime.toLocaleTimeString('en-US', {hour12: !config["format24h"], month: 'short', day: 'numeric', hour: "numeric", minute: "numeric"})
-        embed.setFooter({ text: footertimestamp, iconURL: '' });
+        embed.setFooter({ text: footertimestamp, iconURL: null });
 
         try {
                 return gamedig.query({
