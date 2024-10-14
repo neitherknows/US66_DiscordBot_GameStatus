@@ -531,175 +531,100 @@ function generateStatusEmbed() {
         };
 };
 
-// function graphDataPush(updatedTime, nbrPlayers) {
-//         // save data to json file
-//         fs.readFile(__dirname + '/temp/data/serverData_' + instanceId + '.json', function (err, data) {
-//                 // create file if does not exist
-//                 if (err) {
-//                         fs.writeFile(__dirname + '/temp/data/serverData_' + instanceId + '.json', JSON.stringify([]),function(err){if (err) throw err;});
-//                         return;
-//                 };
+const { createCanvas } = require('@napi-rs/canvas');
+const { Chart, registerables } = require('chart.js');
+Chart.register(...registerables);
 
-//                 let json;
-//                 // read old data and concat new data
-//                 try {
-//                         json = JSON.parse(data);
-//                 } catch (err) {
-//                         console.log("error on graph data")
-//                         console.error(err)
-//                         json = JSON.parse("[]");
-//                 };
+function graphDataPush(updatedTime, nbrPlayers) {
+    const filePath = `${__dirname}/temp/data/serverData_${instanceId}.json`;
 
-//                 // 1 day history
-//         let nbrMuchData = json.length - 24 * 60 * 60 / config["statusUpdateTime"];
-//         if (nbrMuchData > 0) {
-//             json.splice(0, nbrMuchData);
-//         };
+    // Читаем текущие данные из файла
+    let jsonData = [];
+    try {
+        const fileData = fs.readFileSync(filePath, 'utf8');
+        jsonData = JSON.parse(fileData);
+    } catch (error) {
+        console.error('Ошибка при чтении данных графика:', error);
+    }
 
-//                 json.push({"x": updatedTime, "y": nbrPlayers});
+    // Удаляем старые данные, если они превышают предел хранения (например, 1 день)
+    const maxDataPoints = 24 * 60 * 60 / config["statusUpdateTime"]; // 1 день данных
+    if (jsonData.length > maxDataPoints) {
+        jsonData.splice(0, jsonData.length - maxDataPoints);
+    }
 
-//                 // rewrite data file
-//                 fs.writeFile(__dirname + '/temp/data/serverData_' + instanceId + '.json', JSON.stringify(json), function(err){});
-//         });
-// };
+    // Добавляем новые данные
+    jsonData.push({ x: updatedTime, y: nbrPlayers });
 
-// const width = 600;
-// const height = 300;
+    // Перезаписываем данные в файл
+    try {
+        fs.writeFileSync(filePath, JSON.stringify(jsonData, null, 2));
+    } catch (error) {
+        console.error('Ошибка при записи данных графика:', error);
+    }
+}
 
-// const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
-// var canvasRenderService = new ChartJSNodeCanvas({width, height});
+async function generateGraph() {
+    const width = 600;
+    const height = 300;
+    const canvas = createCanvas(width, height);
+    const context = canvas.getContext('2d');
 
-// async function generateGraph() {
-//         while(true){
-//                 try {
+    // Загружаем данные для графика
+    let data = [];
+    try {
+        data = JSON.parse(fs.readFileSync(__dirname + `/temp/data/serverData_${instanceId}.json`, 'utf8'));
+    } catch (error) {
+        console.error('Ошибка при загрузке данных для графика:', error);
+        return;
+    }
 
-//                         // generate graph
-//                         let data = [];
+    // Устанавливаем метки и значения для осей графика
+    const labels = data.map(entry => new Date(entry.x));
+    const playersData = data.map(entry => entry.y);
 
-//                         try {
-//                                 data = JSON.parse(fs.readFileSync(__dirname + '/temp/data/serverData_' + instanceId + '.json', {encoding:'utf8', flag:'r'}));
-//                         } catch (error) {
-//                                 data = [];
-//                         }
+    // Конфигурация для графика
+    const chartConfig = {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Количество игроков',
+                data: playersData,
+                backgroundColor: 'rgba(128, 194, 0, 0.2)',
+                borderColor: '#80c200',
+                borderWidth: 1,
+                pointRadius: 0,
+            }],
+        },
+        options: {
+            responsive: false,
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'hour'
+                    },
+                    ticks: {
+                        maxTicksLimit: 10,
+                    },
+                },
+                y: {
+                    beginAtZero: true,
+                },
+            },
+        },
+    };
 
-//                         let graph_labels = [];
-//                         let graph_datas = [];
+    // Создаем график
+    new Chart(context, chartConfig);
 
-//                         // set data
-//                         for (let i = 0; i < data.length; i += 1) {
-//                                 graph_labels.push(new Date(data[i]["x"]));
-//                                 graph_datas.push(data[i]["y"]);
-//                         };
-
-//                         let graphConfig =  {
-//                                 type: 'line',
-
-//                                 data: {
-//                                         labels: graph_labels,
-//                                         datasets: [{
-//                                                 label: 'number of players',
-//                                                 data: graph_datas,
-
-//                                                 pointRadius: 0,
-
-//                                                 backgroundColor: hexToRgb(config["server_color"], 0.2),
-//                                                 borderColor: hexToRgb(config["server_color"], 1.0),
-//                                                 borderWidth: 1
-//                                         }]
-//                                 },
-
-//                                 options: {
-//                                         downsample: {
-//                                                 enabled: true,
-//                                                 threshold: 500 // max number of points to display per dataset
-//                                         },
-
-//                                         legend: {
-//                                                 display: true,
-//                                                 labels: {
-//                                                         fontColor: 'white'
-//                                                 }
-//                                         },
-//                                         scales: {
-//                                                 yAxes: [{
-//                                                         ticks: {
-//                                                                 fontColor: 'rgba(255,255,255,1)',
-//                                                                 precision: 0,
-//                                                                 beginAtZero: true
-//                                                         },
-//                                                         gridLines: {
-//                                                                 zeroLineColor: 'rgba(255,255,255,1)',
-//                                                                 zeroLineWidth: 0,
-
-//                                                                 color: 'rgba(255,255,255,0.2)',
-//                                                                 lineWidth: 0.5
-//                                                         }
-//                                                 }],
-//                                                 xAxes: [{
-//                                                         type: 'time',
-//                                                         ticks: {
-//                                                                 fontColor: 'rgba(255,255,255,1)',
-//                                                                 autoSkip: true,
-//                                                                 maxTicksLimit: 10
-//                                                         },
-//                                                         time: {
-//                                                                 displayFormats: {
-//                                                                         quarter: 'h a'
-//                                                                 }
-//                                                         },
-//                                                         gridLines: {
-//                                                                 zeroLineColor: 'rgba(255,255,255,1)',
-//                                                                 zeroLineWidth: 0,
-
-//                                                                 color: 'rgba(255,255,255,0.2)',
-//                                                                 lineWidth: 0.5
-//                                                         }
-//                                                 }]
-//                                         },
-//                                         datasets: {
-//                                                 normalized: true,
-//                                                 line: {
-//                                                         pointRadius: 0
-//                                                 }
-//                                         },
-//                                         elements: {
-//                                                 point: {
-//                                                         radius: 0
-//                                                 },
-//                                                 line: {
-//                                                         tension: 0
-//                                                 }
-//                                         },
-//                                         animation: {
-//                                                 duration: 0
-//                                         },
-//                                         responsiveAnimationDuration: 0,
-//                                         hover: {
-//                                                 animationDuration: 0
-//                                         }
-//                                 }
-//                         };
-
-//                         let graphFile = 'graph_' + instanceId + '.png';
-
-//                         canvasRenderService.renderToBuffer(graphConfig).then(data => {
-//                                 fs.writeFileSync(__dirname + '/temp/graphs/' + graphFile, data);
-//                         }).catch(function(error) {
-//                                 console.error("graph creation for guild " + instanceId + " failed.");
-//                                 console.error(error);
-//                         });
-
-//                 } catch (error) {
-//                         console.error(error);
-//                         process.send({
-//                                 instanceid : instanceId,
-//                                 message : "could not generate graph image " + error
-//                         });
-//                 };
-
-//                 await Sleep(60 * 1000); // every minute
-//         };
-// };
+    // Сохраняем изображение графика в файл
+    const buffer = canvas.toBuffer('image/png');
+    const outputPath = __dirname + `/temp/graphs/graph_${instanceId}.png`;
+    fs.writeFileSync(outputPath, buffer);
+    console.log(`График успешно сохранен в ${outputPath}`);
+}
 
 // does what its name says
 function hexToRgb(hex, opacity) {
