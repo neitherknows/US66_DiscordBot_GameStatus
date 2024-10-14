@@ -217,7 +217,7 @@ client.on('interactionCreate', interaction => {
 const gamedig = require('gamedig');
 var tic = false;
 function generateStatusEmbed() {
-        let embed = new MessageEmbed();
+    let embed = new EmbedBuilder(); // новое и правильное обращение
 
         // set embed name and logo
         embed.setAuthor({ name: '', iconURL: '', url: '' })
