@@ -220,7 +220,11 @@ function generateStatusEmbed() {
     let embed = new EmbedBuilder(); // новое и правильное обращение
 
         // set embed name and logo
-        embed.setAuthor({ name: '', iconURL: '', url: '' })
+        embed.setAuthor({ 
+          name: null,
+          iconURL: null,
+          url: null
+        });
 
         // set embed updated time
         tic = !tic;
