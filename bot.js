@@ -334,21 +334,19 @@ function generateStatusEmbed() {
                                 stringpadding = ((config["server_header_padding"] - stringlength) / 2 );
                                 stringtext = stringtext.padStart((stringlength + stringpadding), '\u3000');
                                 stringtext = (stringtext.padEnd(stringlength + (stringpadding * 2),'\u3000'));
-                                embed.addFields('\u200B', '`' + `${stringtext}` + '`');
+                                embed.addFields([{ name: '\u200B', value: '`' + `${stringtext}` + '`' }]);
                         };
 
-                        embed.addFields("Status" + ' :', "🟢 " + "Online", true);
-                        embed.addFields("Direct Connect" + ' :', state.connect, true);
-                        embed.addFields("Location" + ' :', `:flag_${config["server_country"].toLowerCase()}:`, true);
-                        // embed.addFields("Game Mode" + ' :', config["server_type"].charAt(0).toUpperCase() + config["server_type"].slice(1) , true);
-                        embed.addFields("Server" + ' :', config["server_game"].charAt(0).toUpperCase() + config["server_game"].slice(1) , true);
-                        if (state.map == "") {
-                                embed.addFields("\u200B", "\u200B", true);
-                        } else {
-                                embed.addFields("Map" + ' :', state.map.charAt(0).toUpperCase() + state.map.slice(1), true);
-                        };
-                        embed.addFields("Online Players" + ' :', state.players.length + " / " + state.maxplayers, true);
-
+                        embed.addFields([
+                            { name: "Status :", value: "🟢 Online", inline: true },
+                            { name: "Direct Connect :", value: state.connect, inline: true },
+                            { name: "Location :", value: `:flag_${config["server_country"].toLowerCase()}:`, inline: true }
+                        ]);
+                        embed.addFields([
+                            { name: "Server :", value: config["server_game"].charAt(0).toUpperCase() + config["server_game"].slice(1), inline: true },
+                            { name: "Map :", value: state.map ? state.map.charAt(0).toUpperCase() + state.map.slice(1) : "\u200B", inline: true }
+                        ]);
+                        embed.addFields([{ name: "Online Players :", value: `${state.players.length} / ${state.maxplayers}`, inline: true }]);
                         //-----------------------------------------------------------------------------------------------
                         // player list
                         let players_online = 0;
@@ -364,7 +362,7 @@ function generateStatusEmbed() {
                                         stringpadding = ((config["server_header_padding"] - stringlength) / 2 );
                                         stringtext = stringtext.padStart((stringlength + stringpadding), '\u3000');
                                         stringtext = (stringtext.padEnd(stringlength + (stringpadding * 2),'\u3000'));
-                                        embed.addFields('\u200B', '`' + `${stringtext}` + '`');
+                                        embed.addFields([{ name: '\u200B', value: '`' + `${stringtext}` + '`' }]);
                                 };
 
                                 // recover game data
@@ -486,7 +484,7 @@ function generateStatusEmbed() {
                                         player_datas += "```";
 
                                         dataKeys[j] = dataKeys[j].charAt(0).toUpperCase() + dataKeys[j].slice(1);
-                                        embed.addFields(dataKeys[j] + ' :', player_datas, true);
+                                        embed.addFields([{ name: `${dataKeys[j]} :`, value: player_datas, inline: true }]);
                                 };
                         };
 
@@ -504,7 +502,7 @@ function generateStatusEmbed() {
                                         stringpadding = ((config["server_header_padding"] - stringlength) / 2 );
                                         stringtext = stringtext.padStart((stringlength + stringpadding), '\u3000');
                                         stringtext = (stringtext.padEnd(stringlength + (stringpadding * 2),'\u3000'));
-                                        embed.addFields('\u200B', '`' + `${stringtext}` + '`');
+                                        embed.addFields([{ name: '\u200B', value: '`' + `${stringtext}` + '`' }]);
                                 };
 
                                 embed.setImage(
