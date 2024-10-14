@@ -214,7 +214,7 @@ client.on('interactionCreate', interaction => {
 
 //----------------------------------------------------------------------------------------------------------
 // fetch data
-const gamedig = require('gamedig');
+const { query } = require('gamedig');
 var tic = false;
 function generateStatusEmbed() {
     let embed = new EmbedBuilder(); // новое и правильное обращение
@@ -239,7 +239,7 @@ function generateStatusEmbed() {
         embed.setFooter({ text: footertimestamp, iconURL: null });
 
         try {
-                return gamedig.query({
+                return query({
                         type: config["server_type"],
                         host: config["server_host"],
                         port: config["server_port"],
@@ -502,7 +502,7 @@ function generateStatusEmbed() {
                         };
 
                         return embed;
-                }).catch(function(error) {
+                }).catch((error) => {
                         // set bot activity
                         client.user.setActivity("🔴 Offline.", { type: 'WATCHING' });
 
