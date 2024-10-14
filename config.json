@@ -1,196 +1,85 @@
 {
-	"webServerHost" : "github.com",
-	"webServerPort" : 9600,
-	
-	"statusUpdateTime" : 60,
-	"timezone" : [1, 0],
-	"format24h" : true,
+        "webServerHost" : "github.com",
+        "webServerPort" : 9600,
 
-	"instances": [
-		{
-			"discordBotToken" : "",
+        "statusUpdateTime" : 60,
+        "timezone" : [1, 0],
+        "format24h" : true,
 
-			"serverStatusChannelID" : "",
-			"serverStatusMessageID" : "",
-			
-			"server_type" : "",
-			"server_host" : "",
-			"server_port" : "",
-			
-			"server_game" : "ARMA 3",
-			
-			"server_country" : "AU",
-			
-			"server_color" : "#ffffff",
-			
-			"server_enable_headers" : true,
-			"server_header_padding": 47,
-			
-			"server_enable_playerlist" : true,
-			
-			"server_enable_numbers" : false,
-			
-			"server_enable_rank": false,
-			
-			"server_enable_time": true,
-			
-			"server_enable_score": true,
-			"server_sortby_score": true,
-			
-			"server_enable_ping": true,
-			"server_sortby_ping": true,
-			
-			"server_enable_graph" : true,
-			
-			"steam_btn" : false
-		},
-		{
-			"discordBotToken" : "",
+        "instances": [
+                {
+                        "discordBotToken" : "",
 
-			"serverStatusChannelID" : "",
-			"serverStatusMessageID" : "",
-			
-			"server_type" : "",
-			"server_host" : "",
-			"server_port" : "",
-			
-			"server_game" : "ARMA 3",
-			
-			"server_country" : "AU",
-			
-			"server_color" : "#ffffff",
-			
-			"server_enable_headers" : true,
-			"server_header_padding": 47,
-			
-			"server_enable_playerlist" : true,
-			
-			"server_enable_numbers" : false,
-			
-			"server_enable_rank": false,
-			
-			"server_enable_time": true,
-			
-			"server_enable_score": true,
-			"server_sortby_score": true,
-			
-			"server_enable_ping": true,
-			"server_sortby_ping": true,
-			
-			"server_enable_graph" : true,
-			
-			"steam_btn" : false
-		},
-		{
-			"discordBotToken" : "",
+                        "serverStatusChannelID" : "948274519582314508",
+                        "serverStatusMessageID" : "1293572404706148473",
 
-			"serverStatusChannelID" : "",
-			"serverStatusMessageID" : "",
-			
-			"server_type" : "",
-			"server_host" : "",
-			"server_port" : "",
-			
-			"server_game" : "ASSETTO CORSA",
-			
-			"server_country" : "AU",
-			
-			"server_color" : "#ffffff",
-			
-			"server_enable_headers" : true,
-			"server_header_padding": 47,
-			
-			"server_enable_playerlist" : true,
-			
-			"server_enable_numbers" : false,
-			
-			"server_enable_rank": false,
-			
-			"server_enable_time": true,
-			
-			"server_enable_score": true,
-			"server_sortby_score": true,
-			
-			"server_enable_ping": true,
-			"server_sortby_ping": true,
-			
-			"server_enable_graph" : true,
-			
-			"steam_btn" : false
-		},
-		{
-			"discordBotToken" : "",
+                        "server_type" : "arma3",
+                        "server_host" : "31.28.14.201",
+                        "server_port" : "2302",
 
-			"serverStatusChannelID" : "",
-			"serverStatusMessageID" : "",
-			
-			"server_type" : "",
-			"server_host" : "",
-			"server_port" : "",
-			
-			"server_game" : "TEAMSPEAK 3",
-			
-			"server_country" : "AU",
-			
-			"server_color" : "#ffffff",
-			
-			"server_enable_headers" : true,
-			"server_header_padding": 47,
-			
-			"server_enable_playerlist" : true,
-			
-			"server_enable_numbers" : false,
-			
-			"server_enable_rank": false,
-			
-			"server_enable_time": true,
-			
-			"server_enable_score": true,
-			"server_sortby_score": true,
-			
-			"server_enable_ping": true,
-			"server_sortby_ping": true,
-			
-			"server_enable_graph" : true,
-			
-			"steam_btn" : false
-		},
-		{
-			"discordBotToken" : "",
+                        "server_game" : "Devastation",
 
-			"serverStatusChannelID" : "",
-			"serverStatusMessageID" : "",
-			
-			"server_type" : "",
-			"server_host" : "",
-			"server_port" : "",
-			
-			"server_game" : "WRECKFEST",
-			
-			"server_country" : "AU",
-			
-			"server_color" : "#ffffff",
-			
-			"server_enable_headers" : true,
-			"server_header_padding": 47,
-			
-			"server_enable_playerlist" : true,
-			
-			"server_enable_numbers" : false,
-			
-			"server_enable_rank": false,
-			
-			"server_enable_time": true,
-			
-			"server_enable_score": true,
-			"server_sortby_score": true,
-			
-			"server_enable_ping": true,
-			"server_sortby_ping": true,
-			
-			"server_enable_graph" : true,
-			
-			"steam_btn" : false
-		}
-	]
+                        "server_country" : "RU",
+
+                        "server_color" : "#80c200",
+
+                        "server_enable_headers" : true,
+                        "server_header_padding": 35,
+
+                        "server_enable_playerlist" : true,
+
+                        "server_enable_numbers" : false,
+
+                        "server_enable_rank": false,
+
+                        "server_enable_time": true,
+
+                        "server_enable_score": true,
+                        "server_sortby_score": true,
+
+                        "server_enable_ping": false,
+                        "server_sortby_ping": false,
+
+                        "server_enable_graph" : false,
+
+                        "steam_btn" : false
+                },
+                {
+                        "discordBotToken" : "",
+
+                        "serverStatusChannelID" : "960077286596571136",
+                        "serverStatusMessageID" : "1293572389472305286",
+
+                        "server_type" : "arma3",
+                        "server_host" : "31.28.14.190",
+                        "server_port" : "2504",
+
+                        "server_game" : "Desolation",
+
+                        "server_country" : "RU",
+
+                        "server_color" : "#80c200",
+
+                        "server_enable_headers" : true,
+                        "server_header_padding": 35,
+
+                        "server_enable_playerlist" : true,
+
+                        "server_enable_numbers" : false,
+
+                        "server_enable_rank": false,
+
+                        "server_enable_time": true,
+
+                        "server_enable_score": true,
+                        "server_sortby_score": true,
+
+                        "server_enable_ping": false,
+                        "server_sortby_ping": false,
+
+                        "server_enable_graph" : false,
+
+                        "steam_btn" : false
+                }
+        ]
 }
