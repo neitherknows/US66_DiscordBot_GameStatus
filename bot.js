@@ -111,7 +111,7 @@ client.on('ready', async () => {
         };
 
         startStatusMessage(statusMessage);
-        generateGraph();
+//        generateGraph();
 
 });
 
@@ -476,7 +476,7 @@ function generateStatusEmbed() {
                         client.user.setActivity("🟢 Online: " + state.players.length + "/" + state.maxplayers, { type: 'PLAYING' });
 
                         // add graph data
-                        graphDataPush(updatedTime, players_online);
+                        //graphDataPush(updatedTime, players_online);
 
                         // set graph image
                         if (config["server_enable_graph"]) {
@@ -504,7 +504,7 @@ function generateStatusEmbed() {
                         embed.setTitle('🔴 ' + "Server Offline" + '.');
 
                         // add graph data
-                        graphDataPush(updatedTime, 0);
+                        //graphDataPush(updatedTime, 0);
 
                         return embed;
                 });
@@ -518,7 +518,7 @@ function generateStatusEmbed() {
                 embed.setTitle('🔴 ' + "Server Offline" + '.');
 
                 // add graph data
-                graphDataPush(updatedTime, 0);
+                //graphDataPush(updatedTime, 0);
 
                 return embed;
         };
