@@ -54,11 +54,7 @@ function Sleep(milliseconds) {
 // create client
 require('dotenv').config();
 const {Client, MessageEmbed, Intents, MessageActionRow, MessageButton} = require('discord.js');
-const client = new Client({
-        messageEditHistoryMaxSize: 0,
-        intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
-});
-
+const client = new Client({ intents: 1 });
 //----------------------------------------------------------------------------------------------------------
 // on client ready
 client.on('ready', async () => {
@@ -528,175 +524,175 @@ function generateStatusEmbed() {
         };
 };
 
-function graphDataPush(updatedTime, nbrPlayers) {
-        // save data to json file
-        fs.readFile(__dirname + '/temp/data/serverData_' + instanceId + '.json', function (err, data) {
-                // create file if does not exist
-                if (err) {
-                        fs.writeFile(__dirname + '/temp/data/serverData_' + instanceId + '.json', JSON.stringify([]),function(err){if (err) throw err;});
-                        return;
-                };
+// function graphDataPush(updatedTime, nbrPlayers) {
+//         // save data to json file
+//         fs.readFile(__dirname + '/temp/data/serverData_' + instanceId + '.json', function (err, data) {
+//                 // create file if does not exist
+//                 if (err) {
+//                         fs.writeFile(__dirname + '/temp/data/serverData_' + instanceId + '.json', JSON.stringify([]),function(err){if (err) throw err;});
+//                         return;
+//                 };
 
-                let json;
-                // read old data and concat new data
-                try {
-                        json = JSON.parse(data);
-                } catch (err) {
-                        console.log("error on graph data")
-                        console.error(err)
-                        json = JSON.parse("[]");
-                };
+//                 let json;
+//                 // read old data and concat new data
+//                 try {
+//                         json = JSON.parse(data);
+//                 } catch (err) {
+//                         console.log("error on graph data")
+//                         console.error(err)
+//                         json = JSON.parse("[]");
+//                 };
 
-                // 1 day history
-        let nbrMuchData = json.length - 24 * 60 * 60 / config["statusUpdateTime"];
-        if (nbrMuchData > 0) {
-            json.splice(0, nbrMuchData);
-        };
+//                 // 1 day history
+//         let nbrMuchData = json.length - 24 * 60 * 60 / config["statusUpdateTime"];
+//         if (nbrMuchData > 0) {
+//             json.splice(0, nbrMuchData);
+//         };
 
-                json.push({"x": updatedTime, "y": nbrPlayers});
+//                 json.push({"x": updatedTime, "y": nbrPlayers});
 
-                // rewrite data file
-                fs.writeFile(__dirname + '/temp/data/serverData_' + instanceId + '.json', JSON.stringify(json), function(err){});
-        });
-};
+//                 // rewrite data file
+//                 fs.writeFile(__dirname + '/temp/data/serverData_' + instanceId + '.json', JSON.stringify(json), function(err){});
+//         });
+// };
 
-const width = 600;
-const height = 300;
+// const width = 600;
+// const height = 300;
 
-const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
-var canvasRenderService = new ChartJSNodeCanvas({width, height});
+// const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+// var canvasRenderService = new ChartJSNodeCanvas({width, height});
 
-async function generateGraph() {
-        while(true){
-                try {
+// async function generateGraph() {
+//         while(true){
+//                 try {
 
-                        // generate graph
-                        let data = [];
+//                         // generate graph
+//                         let data = [];
 
-                        try {
-                                data = JSON.parse(fs.readFileSync(__dirname + '/temp/data/serverData_' + instanceId + '.json', {encoding:'utf8', flag:'r'}));
-                        } catch (error) {
-                                data = [];
-                        }
+//                         try {
+//                                 data = JSON.parse(fs.readFileSync(__dirname + '/temp/data/serverData_' + instanceId + '.json', {encoding:'utf8', flag:'r'}));
+//                         } catch (error) {
+//                                 data = [];
+//                         }
 
-                        let graph_labels = [];
-                        let graph_datas = [];
+//                         let graph_labels = [];
+//                         let graph_datas = [];
 
-                        // set data
-                        for (let i = 0; i < data.length; i += 1) {
-                                graph_labels.push(new Date(data[i]["x"]));
-                                graph_datas.push(data[i]["y"]);
-                        };
+//                         // set data
+//                         for (let i = 0; i < data.length; i += 1) {
+//                                 graph_labels.push(new Date(data[i]["x"]));
+//                                 graph_datas.push(data[i]["y"]);
+//                         };
 
-                        let graphConfig =  {
-                                type: 'line',
+//                         let graphConfig =  {
+//                                 type: 'line',
 
-                                data: {
-                                        labels: graph_labels,
-                                        datasets: [{
-                                                label: 'number of players',
-                                                data: graph_datas,
+//                                 data: {
+//                                         labels: graph_labels,
+//                                         datasets: [{
+//                                                 label: 'number of players',
+//                                                 data: graph_datas,
 
-                                                pointRadius: 0,
+//                                                 pointRadius: 0,
 
-                                                backgroundColor: hexToRgb(config["server_color"], 0.2),
-                                                borderColor: hexToRgb(config["server_color"], 1.0),
-                                                borderWidth: 1
-                                        }]
-                                },
+//                                                 backgroundColor: hexToRgb(config["server_color"], 0.2),
+//                                                 borderColor: hexToRgb(config["server_color"], 1.0),
+//                                                 borderWidth: 1
+//                                         }]
+//                                 },
 
-                                options: {
-                                        downsample: {
-                                                enabled: true,
-                                                threshold: 500 // max number of points to display per dataset
-                                        },
+//                                 options: {
+//                                         downsample: {
+//                                                 enabled: true,
+//                                                 threshold: 500 // max number of points to display per dataset
+//                                         },
 
-                                        legend: {
-                                                display: true,
-                                                labels: {
-                                                        fontColor: 'white'
-                                                }
-                                        },
-                                        scales: {
-                                                yAxes: [{
-                                                        ticks: {
-                                                                fontColor: 'rgba(255,255,255,1)',
-                                                                precision: 0,
-                                                                beginAtZero: true
-                                                        },
-                                                        gridLines: {
-                                                                zeroLineColor: 'rgba(255,255,255,1)',
-                                                                zeroLineWidth: 0,
+//                                         legend: {
+//                                                 display: true,
+//                                                 labels: {
+//                                                         fontColor: 'white'
+//                                                 }
+//                                         },
+//                                         scales: {
+//                                                 yAxes: [{
+//                                                         ticks: {
+//                                                                 fontColor: 'rgba(255,255,255,1)',
+//                                                                 precision: 0,
+//                                                                 beginAtZero: true
+//                                                         },
+//                                                         gridLines: {
+//                                                                 zeroLineColor: 'rgba(255,255,255,1)',
+//                                                                 zeroLineWidth: 0,
 
-                                                                color: 'rgba(255,255,255,0.2)',
-                                                                lineWidth: 0.5
-                                                        }
-                                                }],
-                                                xAxes: [{
-                                                        type: 'time',
-                                                        ticks: {
-                                                                fontColor: 'rgba(255,255,255,1)',
-                                                                autoSkip: true,
-                                                                maxTicksLimit: 10
-                                                        },
-                                                        time: {
-                                                                displayFormats: {
-                                                                        quarter: 'h a'
-                                                                }
-                                                        },
-                                                        gridLines: {
-                                                                zeroLineColor: 'rgba(255,255,255,1)',
-                                                                zeroLineWidth: 0,
+//                                                                 color: 'rgba(255,255,255,0.2)',
+//                                                                 lineWidth: 0.5
+//                                                         }
+//                                                 }],
+//                                                 xAxes: [{
+//                                                         type: 'time',
+//                                                         ticks: {
+//                                                                 fontColor: 'rgba(255,255,255,1)',
+//                                                                 autoSkip: true,
+//                                                                 maxTicksLimit: 10
+//                                                         },
+//                                                         time: {
+//                                                                 displayFormats: {
+//                                                                         quarter: 'h a'
+//                                                                 }
+//                                                         },
+//                                                         gridLines: {
+//                                                                 zeroLineColor: 'rgba(255,255,255,1)',
+//                                                                 zeroLineWidth: 0,
 
-                                                                color: 'rgba(255,255,255,0.2)',
-                                                                lineWidth: 0.5
-                                                        }
-                                                }]
-                                        },
-                                        datasets: {
-                                                normalized: true,
-                                                line: {
-                                                        pointRadius: 0
-                                                }
-                                        },
-                                        elements: {
-                                                point: {
-                                                        radius: 0
-                                                },
-                                                line: {
-                                                        tension: 0
-                                                }
-                                        },
-                                        animation: {
-                                                duration: 0
-                                        },
-                                        responsiveAnimationDuration: 0,
-                                        hover: {
-                                                animationDuration: 0
-                                        }
-                                }
-                        };
+//                                                                 color: 'rgba(255,255,255,0.2)',
+//                                                                 lineWidth: 0.5
+//                                                         }
+//                                                 }]
+//                                         },
+//                                         datasets: {
+//                                                 normalized: true,
+//                                                 line: {
+//                                                         pointRadius: 0
+//                                                 }
+//                                         },
+//                                         elements: {
+//                                                 point: {
+//                                                         radius: 0
+//                                                 },
+//                                                 line: {
+//                                                         tension: 0
+//                                                 }
+//                                         },
+//                                         animation: {
+//                                                 duration: 0
+//                                         },
+//                                         responsiveAnimationDuration: 0,
+//                                         hover: {
+//                                                 animationDuration: 0
+//                                         }
+//                                 }
+//                         };
 
-                        let graphFile = 'graph_' + instanceId + '.png';
+//                         let graphFile = 'graph_' + instanceId + '.png';
 
-                        canvasRenderService.renderToBuffer(graphConfig).then(data => {
-                                fs.writeFileSync(__dirname + '/temp/graphs/' + graphFile, data);
-                        }).catch(function(error) {
-                                console.error("graph creation for guild " + instanceId + " failed.");
-                                console.error(error);
-                        });
+//                         canvasRenderService.renderToBuffer(graphConfig).then(data => {
+//                                 fs.writeFileSync(__dirname + '/temp/graphs/' + graphFile, data);
+//                         }).catch(function(error) {
+//                                 console.error("graph creation for guild " + instanceId + " failed.");
+//                                 console.error(error);
+//                         });
 
-                } catch (error) {
-                        console.error(error);
-                        process.send({
-                                instanceid : instanceId,
-                                message : "could not generate graph image " + error
-                        });
-                };
+//                 } catch (error) {
+//                         console.error(error);
+//                         process.send({
+//                                 instanceid : instanceId,
+//                                 message : "could not generate graph image " + error
+//                         });
+//                 };
 
-                await Sleep(60 * 1000); // every minute
-        };
-};
+//                 await Sleep(60 * 1000); // every minute
+//         };
+// };
 
 // does what its name says
 function hexToRgb(hex, opacity) {
