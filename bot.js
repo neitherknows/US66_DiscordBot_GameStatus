@@ -44,6 +44,17 @@ function init() {
         client.login(config["discordBotToken"]);
 };
 
+const path = require('path');
+
+// Путь к файлу данных
+const dataDir = path.join(__dirname, 'temp/data');
+const dataFilePath = path.join(dataDir, `serverData_${instanceId}.json`);
+
+// Создайте файл данных, если он отсутствует
+if (!fs.existsSync(dataFilePath)) {
+    fs.writeFileSync(dataFilePath, JSON.stringify([]));
+}
+
 //----------------------------------------------------------------------------------------------------------
 // common
 function Sleep(milliseconds) {
@@ -214,8 +225,8 @@ client.on('interactionCreate', interaction => {
 
 //----------------------------------------------------------------------------------------------------------
 // fetch data
-const gamedig = require('gamedig');
-console.log(gamedig);
+const { GameDig } = require('gamedig');
+console.log(GameDig);
 var tic = false;
 function generateStatusEmbed() {
     let embed = new EmbedBuilder(); // новое и правильное обращение
@@ -240,12 +251,12 @@ function generateStatusEmbed() {
         embed.setFooter({ text: footertimestamp, iconURL: null });
 
         try {
-                return gamedig.query({
+                return GameDig.query({
                     type: config["server_type"],
                     host: config["server_host"],
                     port: config["server_port"],
                     maxAttempts: 5,
-                    socketTimeout: 1000,
+                    socketTimeout: 3000,
                     debug: false
                 })
                 .then((state) => {
@@ -323,20 +334,20 @@ function generateStatusEmbed() {
                                 stringpadding = ((config["server_header_padding"] - stringlength) / 2 );
                                 stringtext = stringtext.padStart((stringlength + stringpadding), '\u3000');
                                 stringtext = (stringtext.padEnd(stringlength + (stringpadding * 2),'\u3000'));
-                                embed.addField('\u200B', '`' + `${stringtext}` + '`');
+                                embed.addFields('\u200B', '`' + `${stringtext}` + '`');
                         };
 
-                        embed.addField("Status" + ' :', "🟢 " + "Online", true);
-                        embed.addField("Direct Connect" + ' :', state.connect, true);
-                        embed.addField("Location" + ' :', `:flag_${config["server_country"].toLowerCase()}:`, true);
-                        // embed.addField("Game Mode" + ' :', config["server_type"].charAt(0).toUpperCase() + config["server_type"].slice(1) , true);
-                        embed.addField("Server" + ' :', config["server_game"].charAt(0).toUpperCase() + config["server_game"].slice(1) , true);
+                        embed.addFields("Status" + ' :', "🟢 " + "Online", true);
+                        embed.addFields("Direct Connect" + ' :', state.connect, true);
+                        embed.addFields("Location" + ' :', `:flag_${config["server_country"].toLowerCase()}:`, true);
+                        // embed.addFields("Game Mode" + ' :', config["server_type"].charAt(0).toUpperCase() + config["server_type"].slice(1) , true);
+                        embed.addFields("Server" + ' :', config["server_game"].charAt(0).toUpperCase() + config["server_game"].slice(1) , true);
                         if (state.map == "") {
-                                embed.addField("\u200B", "\u200B", true);
+                                embed.addFields("\u200B", "\u200B", true);
                         } else {
-                                embed.addField("Map" + ' :', state.map.charAt(0).toUpperCase() + state.map.slice(1), true);
+                                embed.addFields("Map" + ' :', state.map.charAt(0).toUpperCase() + state.map.slice(1), true);
                         };
-                        embed.addField("Online Players" + ' :', state.players.length + " / " + state.maxplayers, true);
+                        embed.addFields("Online Players" + ' :', state.players.length + " / " + state.maxplayers, true);
 
                         //-----------------------------------------------------------------------------------------------
                         // player list
@@ -353,7 +364,7 @@ function generateStatusEmbed() {
                                         stringpadding = ((config["server_header_padding"] - stringlength) / 2 );
                                         stringtext = stringtext.padStart((stringlength + stringpadding), '\u3000');
                                         stringtext = (stringtext.padEnd(stringlength + (stringpadding * 2),'\u3000'));
-                                        embed.addField('\u200B', '`' + `${stringtext}` + '`');
+                                        embed.addFields('\u200B', '`' + `${stringtext}` + '`');
                                 };
 
                                 // recover game data
@@ -475,7 +486,7 @@ function generateStatusEmbed() {
                                         player_datas += "```";
 
                                         dataKeys[j] = dataKeys[j].charAt(0).toUpperCase() + dataKeys[j].slice(1);
-                                        embed.addField(dataKeys[j] + ' :', player_datas, true);
+                                        embed.addFields(dataKeys[j] + ' :', player_datas, true);
                                 };
                         };
 
@@ -493,7 +504,7 @@ function generateStatusEmbed() {
                                         stringpadding = ((config["server_header_padding"] - stringlength) / 2 );
                                         stringtext = stringtext.padStart((stringlength + stringpadding), '\u3000');
                                         stringtext = (stringtext.padEnd(stringlength + (stringpadding * 2),'\u3000'));
-                                        embed.addField('\u200B', '`' + `${stringtext}` + '`');
+                                        embed.addFields('\u200B', '`' + `${stringtext}` + '`');
                                 };
 
                                 embed.setImage(
