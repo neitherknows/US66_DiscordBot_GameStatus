@@ -214,7 +214,8 @@ client.on('interactionCreate', interaction => {
 
 //----------------------------------------------------------------------------------------------------------
 // fetch data
-const { query } = require('gamedig');
+const gamedig = require('gamedig');
+console.log(gamedig);
 var tic = false;
 function generateStatusEmbed() {
     let embed = new EmbedBuilder(); // новое и правильное обращение
@@ -239,16 +240,15 @@ function generateStatusEmbed() {
         embed.setFooter({ text: footertimestamp, iconURL: null });
 
         try {
-                return query({
-                        type: config["server_type"],
-                        host: config["server_host"],
-                        port: config["server_port"],
-
-                        maxAttempts: 5,
-                        socketTimeout: 1000,
-                        debug: false
-                }).then((state) => {
-
+                return gamedig.query({
+                    type: config["server_type"],
+                    host: config["server_host"],
+                    port: config["server_port"],
+                    maxAttempts: 5,
+                    socketTimeout: 1000,
+                    debug: false
+                })
+                .then((state) => {
                         //-----------------------------------------------------------------------------------------------
                         // soulkobk edit 20220406 - updated 'players' objects to found/defined keys for use with dataKeys parsing
                         let oldplayers = state.players;
@@ -483,7 +483,7 @@ function generateStatusEmbed() {
                         client.user.setActivity("🟢 Online: " + state.players.length + "/" + state.maxplayers, { type: 'PLAYING' });
 
                         // add graph data
-                        //graphDataPush(updatedTime, players_online);
+                        graphDataPush(updatedTime, players_online);
 
                         // set graph image
                         if (config["server_enable_graph"]) {
@@ -502,18 +502,13 @@ function generateStatusEmbed() {
                         };
 
                         return embed;
-                }).catch((error) => {
-                        // set bot activity
-                        client.user.setActivity("🔴 Offline.", { type: 'WATCHING' });
-
-                        // offline status message
-                        embed.setColor('#ff0000');
-                        embed.setTitle('🔴 ' + "Server Offline" + '.');
-
-                        // add graph data
-                        //graphDataPush(updatedTime, 0);
-
-                        return embed;
+                })
+                .catch((error) => {
+                    console.error("Ошибка при запросе состояния сервера:", error);
+                    client.user.setActivity("🔴 Offline.", { type: 'WATCHING' });
+                    embed.setColor('#ff0000');
+                    embed.setTitle('🔴 Server Offline.');
+                    return embed;
                 });
         } catch (error) {
                 console.log(error);
@@ -525,7 +520,7 @@ function generateStatusEmbed() {
                 embed.setTitle('🔴 ' + "Server Offline" + '.');
 
                 // add graph data
-                //graphDataPush(updatedTime, 0);
+                graphDataPush(updatedTime, 0);
 
                 return embed;
         };
@@ -545,13 +540,13 @@ function graphDataPush(updatedTime, nbrPlayers) {
         jsonData = JSON.parse(fileData);
     } catch (error) {
         console.error('Ошибка при чтении данных графика:', error);
-    }
+    };
 
     // Удаляем старые данные, если они превышают предел хранения (например, 1 день)
     const maxDataPoints = 24 * 60 * 60 / config["statusUpdateTime"]; // 1 день данных
     if (jsonData.length > maxDataPoints) {
         jsonData.splice(0, jsonData.length - maxDataPoints);
-    }
+    };
 
     // Добавляем новые данные
     jsonData.push({ x: updatedTime, y: nbrPlayers });
@@ -561,8 +556,8 @@ function graphDataPush(updatedTime, nbrPlayers) {
         fs.writeFileSync(filePath, JSON.stringify(jsonData, null, 2));
     } catch (error) {
         console.error('Ошибка при записи данных графика:', error);
-    }
-}
+    };
+};
 
 async function generateGraph() {
     const width = 600;
@@ -577,7 +572,7 @@ async function generateGraph() {
     } catch (error) {
         console.error('Ошибка при загрузке данных для графика:', error);
         return;
-    }
+    };
 
     // Устанавливаем метки и значения для осей графика
     const labels = data.map(entry => new Date(entry.x));
@@ -624,7 +619,7 @@ async function generateGraph() {
     const outputPath = __dirname + `/temp/graphs/graph_${instanceId}.png`;
     fs.writeFileSync(outputPath, buffer);
     console.log(`График успешно сохранен в ${outputPath}`);
-}
+};
 
 // does what its name says
 function hexToRgb(hex, opacity) {
