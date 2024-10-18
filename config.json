@@ -1,5 +1,5 @@
 {
-        "webServerHost" : "github.com",
+        "webServerHost" : "localhost",
         "webServerPort" : 9600,
 
         "statusUpdateTime" : 60,
@@ -10,18 +10,18 @@
                 {
                         "discordBotToken" : "",
 
-                        "serverStatusChannelID" : "948274519582314508",
-                        "serverStatusMessageID" : "1293572404706148473",
+                        "serverStatusChannelID" : "",
+                        "serverStatusMessageID" : "",
 
-                        "server_type" : "arma3",
-                        "server_host" : "31.28.14.201",
-                        "server_port" : "2302",
+                        "server_type" : "",
+                        "server_host" : "",
+                        "server_port" : "",
 
-                        "server_game" : "Devastation",
+                        "server_game" : "",
 
-                        "server_country" : "RU",
+                        "server_country" : "",
 
-                        "server_color" : "#80c200",
+                        "server_color" : "#",
 
                         "server_enable_headers" : true,
                         "server_header_padding": 35,
@@ -47,18 +47,18 @@
                 {
                         "discordBotToken" : "",
 
-                        "serverStatusChannelID" : "960077286596571136",
-                        "serverStatusMessageID" : "1293572389472305286",
+                        "serverStatusChannelID" : "",
+                        "serverStatusMessageID" : "",
 
-                        "server_type" : "arma3",
-                        "server_host" : "31.28.14.190",
-                        "server_port" : "2504",
+                        "server_type" : "",
+                        "server_host" : "",
+                        "server_port" : "",
 
-                        "server_game" : "Desolation",
+                        "server_game" : "",
 
-                        "server_country" : "RU",
+                        "server_country" : "",
 
-                        "server_color" : "#80c200",
+                        "server_color" : "#",
 
                         "server_enable_headers" : true,
                         "server_header_padding": 35,
