@@ -10,7 +10,7 @@ The difference in this version:
 - Removed the unused and non-functioning functionality of building an online graph
 
 Recommendation:
-- Set up 1 monitoring per project clone
+Set up 1 monitoring per project clone
 The operation is still unstable and if there is no response from the monitored server for a long time, one of the threads ends, to restart it, a complete restart of the bot will be required
 
 ##How to install?
