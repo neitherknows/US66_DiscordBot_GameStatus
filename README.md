@@ -1,28 +1,22 @@
 # DiscordBot_GameStatus
 
-This is an updated/modified version of https://github.com/Ramzi-Sah/game-status-discordbot-selfhosted
+Modification-modifications of the module https://github.com/Ramzi-Sah/game-status-discordbot-selfhosted
 
-+ Fixed gamedig parsing (rank, name, time, score, ping)
-+ Fixed embed formatting
-+ Fixed pathing to graph
-+ Added additional options to `config.json`
-+ Added sorting by score or ping
-+ Added header padding length option (regardless, headers will no longer wrap around)
-+ Fixed 'rank' to always sort from '01' onward regardless of sort option chosen
-+ Fixed time parsing to make sure it's a valid number
-+ Many other code changes/fixes/refactoring
-+ Added multiple instances (config entry)
+Thanks to Ramzi-Sah and soulkobk for their work
+
+The difference in this version:
+- Removed the bat file for running under windows to save space on the hosting
+- Updated the used libraries (as of October 2024)
+- Removed the unused and non-functioning functionality of building an online graph
+
+Recommendation:
+- Set up 1 monitoring per project clone
+The operation is still unstable and if there is no response from the monitored server for a long time, one of the threads ends, to restart it, a complete restart of the bot will be required
 
 ##How to install?
 
-Windows...
-1. Make sure `node.js` is installed on the system (https://nodejs.org)
-2. Unpack the files to a directory of your choice.
-3. Open a cmd terminal and change directory to the unpacked files.
-4. In the cmd terminal, type -> npm install
-5. Configure your `config.json` file with your settings.
-6. To launch the bot, type -> `bot.bat` (or `node index.js`)
-
-> Note, for the in built http server to function (graph enabled), it needs to be accessible remotely (eg, allowed via firewall + port forwarding)
-
-Now with the addition of multiple instances, first launch the bot with all "serverStatusMessageID" entries as "". The console window will output what to paste in the config.json once the message ID is returned. Once your config.json is updated and saved, close the bot and relaunch it.
+1. clone project
+2. cd US66_DiscordBot_GameStatus
+3. npm install
+4. nano config.json
+5. node index.js&
