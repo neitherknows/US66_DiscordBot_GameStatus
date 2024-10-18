@@ -130,7 +130,6 @@ client.on('ready', async () => {
         };
 
         startStatusMessage(statusMessage);
-//        generateGraph();
 
 });
 
@@ -490,27 +489,7 @@ function generateStatusEmbed() {
                         };
 
                         // set bot activity
-                        client.user.setActivity('🟢 Online', { type: ActivityType.Playing });
-                        //client.user.setActivity("🟢 Online: " + state.players.length + "/" + state.maxplayers, { type: ActivityType.Playing });
-
-                        // add graph data
-                        // graphDataPush(updatedTime, players_online);
-
-                        // set graph image
-                        // if (config["server_enable_graph"]) {
-                        //         if (config["server_enable_headers"]) {
-                        //                 stringtext = "    P L A Y E R   G R A P H   ";
-                        //                 stringlength = stringtext.length;
-                        //                 stringpadding = ((config["server_header_padding"] - stringlength) / 2 );
-                        //                 stringtext = stringtext.padStart((stringlength + stringpadding), '\u3000');
-                        //                 stringtext = (stringtext.padEnd(stringlength + (stringpadding * 2),'\u3000'));
-                        //                 embed.addFields([{ name: '\u200B', value: '`' + `${stringtext}` + '`' }]);
-                        //         };
-
-                        //         embed.setImage(
-                        //                 "http://" + config["webServerHost"] + ":" + config["webServerPort"] + "/" + 'graph_' + instanceId + '.png' + "?id=" + Date.now()
-                        //         );
-                        // };
+                        client.user.setActivity(`🟢 Online, ${state.players.length} / ${state.maxplayers}`, { type: ActivityType.Playing });
 
                         return embed;
                 })
@@ -530,7 +509,6 @@ function generateStatusEmbed() {
                 embed.setColor('#ff0000');
                 embed.setTitle('🔴 Server Offline');
                 // add graph data
-                //graphDataPush(updatedTime, 0);
                 return embed;
         };
 };
@@ -538,97 +516,6 @@ function generateStatusEmbed() {
 const { createCanvas } = require('@napi-rs/canvas');
 const { Chart, registerables } = require('chart.js');
 Chart.register(...registerables);
-
-// function graphDataPush(updatedTime, nbrPlayers) {
-//     const filePath = `${__dirname}/temp/data/serverData_${instanceId}.json`;
-
-//     // Читаем текущие данные из файла
-//     let jsonData = [];
-//     try {
-//         const fileData = fs.readFileSync(filePath, 'utf8');
-//         jsonData = JSON.parse(fileData);
-//     } catch (error) {
-//         console.error('Ошибка при чтении данных графика:', error);
-//     };
-
-//     // Удаляем старые данные, если они превышают предел хранения (например, 1 день)
-//     const maxDataPoints = 24 * 60 * 60 / config["statusUpdateTime"]; // 1 день данных
-//     if (jsonData.length > maxDataPoints) {
-//         jsonData.splice(0, jsonData.length - maxDataPoints);
-//     };
-
-//     // Добавляем новые данные
-//     jsonData.push({ x: updatedTime, y: nbrPlayers });
-
-//     // Перезаписываем данные в файл
-//     try {
-//         fs.writeFileSync(filePath, JSON.stringify(jsonData, null, 2));
-//     } catch (error) {
-//         console.error('Ошибка при записи данных графика:', error);
-//     };
-// };
-
-// async function generateGraph() {
-//     const width = 600;
-//     const height = 300;
-//     const canvas = createCanvas(width, height);
-//     const context = canvas.getContext('2d');
-
-//     // Загружаем данные для графика
-//     let data = [];
-//     try {
-//         data = JSON.parse(fs.readFileSync(__dirname + `/temp/data/serverData_${instanceId}.json`, 'utf8'));
-//     } catch (error) {
-//         console.error('Ошибка при загрузке данных для графика:', error);
-//         return;
-//     };
-
-//     // Устанавливаем метки и значения для осей графика
-//     const labels = data.map(entry => new Date(entry.x));
-//     const playersData = data.map(entry => entry.y);
-
-//     // Конфигурация для графика
-//     const chartConfig = {
-//         type: 'line',
-//         data: {
-//             labels: labels,
-//             datasets: [{
-//                 label: 'Количество игроков',
-//                 data: playersData,
-//                 backgroundColor: 'rgba(128, 194, 0, 0.2)',
-//                 borderColor: '#80c200',
-//                 borderWidth: 1,
-//                 pointRadius: 0,
-//             }],
-//         },
-//         options: {
-//             responsive: false,
-//             scales: {
-//                 x: {
-//                     type: 'time',
-//                     time: {
-//                         unit: 'hour'
-//                     },
-//                     ticks: {
-//                         maxTicksLimit: 10,
-//                     },
-//                 },
-//                 y: {
-//                     beginAtZero: true,
-//                 },
-//             },
-//         },
-//     };
-
-//     // Создаем график
-//     new Chart(context, chartConfig);
-
-//     // Сохраняем изображение графика в файл
-//     const buffer = canvas.toBuffer('image/png');
-//     const outputPath = __dirname + `/temp/graphs/graph_${instanceId}.png`;
-//     fs.writeFileSync(outputPath, buffer);
-//     console.log(`График успешно сохранен в ${outputPath}`);
-// };
 
 // does what its name says
 function hexToRgb(hex, opacity) {
