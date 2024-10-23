@@ -9,10 +9,11 @@
   "author": "",
   "license": "GPLv3",
   "dependencies": {
+    "@napi-rs/canvas": "^0.1.38",
+    "chart.js": "^4.0.1",
     "discord.js": "^14.0.0",
     "dotenv": "^10.0.0",
     "gamedig": "^5.0.0",
-    "@napi-rs/canvas": "^0.1.38",
-    "chart.js": "^4.0.1"
+    "undici": "^6.20.1"
   }
 }
