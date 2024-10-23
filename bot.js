@@ -46,6 +46,8 @@ function init() {
 
 const path = require('path');
 
+const { fetch, setGlobalDispatcher, Agent } = require('undici');
+
 // Путь к файлу данных
 const dataDir = path.join(__dirname, 'temp/data');
 const dataFilePath = path.join(dataDir, `serverData_${instanceId}.json`);
@@ -193,7 +195,7 @@ function getLastMessage(statusChannel) {
 
 //----------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------
-// main loops
+//main loops
 async function startStatusMessage(statusMessage) {
     while(true) {
         try {
@@ -226,6 +228,7 @@ client.on('interactionCreate', interaction => {
 // fetch data
 const { GameDig } = require('gamedig');
 console.log(GameDig);
+setGlobalDispatcher(new Agent({connect: { timeout: 20_000 }}));
 var tic = false;
 function generateStatusEmbed() {
     let embed = new EmbedBuilder(); // новое и правильное обращение
@@ -254,9 +257,10 @@ function generateStatusEmbed() {
                     type: config["server_type"],
                     host: config["server_host"],
                     port: config["server_port"],
-                    listenUdpPort: config["server_port"],
-                    maxAttempts: 5,
-                    socketTimeout: 3000,
+                    maxRetries: 50,
+                    maxAttempts: 50,
+                    socketTimeout: 10000,
+                    portCache: true,
                     debug: false
                 })
                 .then((state) => {
@@ -444,7 +448,7 @@ function generateStatusEmbed() {
                                                                         } else {
                                                                                 player_datas += player_data;
                                                                         };
-                                                                        players_online = state.players.length;
+                                                                        players_online = 0;
                                                                 } else {
                                                                         player_data = (player_data.length > 16) ? player_data.substring(0, 16 - 3) + "..." : player_data;
                                                                         if (config["server_enable_numbers"]) {
@@ -489,7 +493,8 @@ function generateStatusEmbed() {
                         };
 
                         // set bot activity
-                        client.user.setActivity(`🟢 Online, ${state.players.length} / ${state.maxplayers}`, { type: ActivityType.Playing });
+                        client.user.setActivity(`🟢 Online, ${players_online} / ${state.maxplayers}`, { type: ActivityType.Playing });
+                        console.log(`${players_online} / ${state.players.length} / ${state.maxplayers}`); 
 
                         return embed;
                 })
@@ -508,7 +513,6 @@ function generateStatusEmbed() {
                 // offline status message
                 embed.setColor('#ff0000');
                 embed.setTitle('🔴 Server Offline');
-                // add graph data
                 return embed;
         };
 };
